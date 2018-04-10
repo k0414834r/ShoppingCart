@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <p>Hello! Check the forecasts down below.</p>
+    <button id="getForecast">Get the forecast!</button>
+    <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="weather"></div>
+
+{% endblock %}
+
+{% block js %}
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'weather.js') }}"></script>
+
+{% endblock %}

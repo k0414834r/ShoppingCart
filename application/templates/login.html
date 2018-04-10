@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <br>
+    <br>
+    <br>
+
+    <div class="login">
+        <h1>Sign In</h1>
+
+        <form action="#" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.username.label(class='form') }}
+                <br>
+                {{ form.username(size = 32)}}
+            </p>
+            <p>
+                {{ form.password.label(class='form') }}
+                <br>
+                {{ form.password(size = 32 ) }}
+            </p>
+            <p>
+                {{ form.remember_me() }}
+                <br>
+                {{ form.remember_me.label(class='form') }}
+            </p>
+            <p>
+                {{ form.submit() }}
+            </p>
+        </form>
+
+        <p>New User?
+            <span style="float: right">
+                <a href="{{ url_for('signup') }}">Click to Sign Up!</a>
+            </span>
+        </p>
+    </div>
+
+{% endblock %}

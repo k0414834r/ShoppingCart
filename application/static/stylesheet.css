@@ -1,0 +1,90 @@
+#one {
+    float: left;
+    width: 33%;
+    display: table-cell;
+}
+
+#two {
+    width: 33%;
+    display: table-cell;
+}
+
+#three {
+    float: right;
+    width: 33%;
+    display: table-cell;
+}
+
+.heading {
+    margin: 0 auto;
+    width: 50%;
+    font-size: 36px;
+    font-family: Georgia;
+    border-color: black;
+    border: 0 0 5px 0;
+    display: table;
+    text-align: center;
+}
+
+.container {
+    margin: 0 auto;
+    width: 50%;
+    padding: none;
+}
+
+.index {
+    margin: 0 auto;
+    width: 90%;
+    padding: 0;
+}
+
+.login {
+    margin: 0 auto;
+    vertical-align: middle;
+    padding: 3% 10% 3% 10%;
+    width: 38%;
+    border: 5px;
+    border-color: black;
+    border-radius: 3px;
+    border-style: outset;
+}
+
+p {
+
+}
+
+h1 {
+
+}
+
+h2 {
+
+}
+
+h3 {
+
+}
+
+a {
+
+}
+
+a:hover {
+
+}
+
+a:visited {
+
+}
+
+a:visited:hover {
+
+}
+
+.form {
+
+}
+
+.flash {
+
+}
