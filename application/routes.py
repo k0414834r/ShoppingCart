@@ -1,5 +1,5 @@
 from application import app, db
-from application.models import User, Post, Member
+from application.models import User, Post, Member, Product, Cart
 from flask import render_template, url_for, redirect, flash
 from application.forms import LoginForm, RegistrationForm
 from flask_login import logout_user, login_user, current_user
@@ -55,31 +55,29 @@ def signup():
 def weather():
     return render_template('weather.html')
 
-@app.route('/forecast')
-def forecast():
-   # Set a float format as we'll always be looking at USD monetary values
-   pd.options.display.float_format = '${:,.2f}'.format
-   # Read in hourly bitcoin price from conbase - price data provided via http://bitcoinity.org
-   df = pd.read_csv(
-       'http://data.bitcoinity.org/export_data.csv?currency=USD&data_type=price&exchange=coinbase&r=hour&t=l&timespan=30d',
-       parse_dates=['Time'])
+@app.route('/products')
+def product():
+    products = Product.query.all()
 
-   # Set the date/time to be the index for the dataframe
-   df.set_index('Time', inplace=True)
-   df['ds'] = df.index
-   df['y'] = df['avg']
+    return render_template('products.html', products=products)
 
-   # read data
-   forecast_data = df[['ds', 'y']].copy()
-   forecast_data.reset_index(inplace=True)
-   del forecast_data['Time']
+@app.route('/cart')
+def cart():
+    cart = Cart.query.all()
+    return render_template('cart.html', cart=cart)
 
-   m = Prophet()
-   m.fit(forecast_data);
+@app.route('/addToCart/<int:product_id>/<string:from_page>')
+def addToCart(product_id, from_page):
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
 
-   future = m.make_future_dataframe(periods=100, freq='H')
+    cart = Cart(user_id=current_user.id, product_id=product_id)
+    db.session.add(cart)
+    db.session.commit()
+    return redirect(url_for('cart'))
 
-   forecasts = m.predict(future)
-   forecasts = forecasts[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].to_json()
+@app.route('/removeFromCart/<int:product_id>')
+def removeFromCart(product_id, from_page):
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
 
-   return forecasts

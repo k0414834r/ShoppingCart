@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+   {% block content %}
+
+        <div>
+            <h2>Products</h2>
+            {% for data in products %}
+                <div>
+                    <h4>{{data.name}}</h4>
+                    <div>Price: {{data.price}}</div>
+                    <div>Stock: {{data.stock}}</div>
+
+                    <div>
+                        <a href='/product/{{data.id}}'> Detail </a>
+                        <br>
+                        <a href='/addToCart/{{data.id}}/products'> Add to Cart </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% endblock %}
