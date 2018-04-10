@@ -3,8 +3,6 @@ from application.models import User, Post, Member
 from flask import render_template, url_for, redirect, flash
 from application.forms import LoginForm, RegistrationForm
 from flask_login import logout_user, login_user, current_user
-import pandas as pd
-from fbprophet import Prophet
 
 @app.route("/")
 @app.route('/index')

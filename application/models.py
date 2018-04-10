@@ -39,4 +39,29 @@ class Member(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}'.format(self.body)
+        return '<Member {}'.format(self.body)
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    description = db.Column(db.String(280))
+
+    def __repr__(self):
+        return '<Category {}'.format(self.description)
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    name = db.Column(db.String(20))
+    description = db.Column(db.String(280))
+    image = db.Column(db.String(80))
+    stock = db.Column(db.Integer)
+    price = db.Column(db.Float)
+
+    def __repr__(self):
+        return '<Product {}'.format(self.description)
+
+class Cart(db.Model):
+    cart_id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
