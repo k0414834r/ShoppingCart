@@ -61,10 +61,15 @@ def product():
 
     return render_template('products.html', products=products)
 
+@app.route('/product/<int:product_id>')
+def products(product_id):
+    product_data = Product.query.filter_by(id=product_id).first()
+    return render_template('details.html', data=product_data)
+
 @app.route('/cart')
 def cart():
-    cart = Cart.query.all()
-    return render_template('cart.html', cart=cart)
+    products_in_cart = Cart.query.filter_by(user_id=current_user.id).join(Product, Cart.product_id == Product.id).add_columns(Product.name, Product.price, Product.image, Product.id).all()
+    return render_template('cart.html', products=products_in_cart)
 
 @app.route('/addToCart/<int:product_id>/<string:from_page>')
 def addToCart(product_id, from_page):
@@ -76,8 +81,12 @@ def addToCart(product_id, from_page):
     db.session.commit()
     return redirect(url_for('cart'))
 
-@app.route('/removeFromCart/<int:product_id>')
+@app.route('/removeFromCart/<int:product_id>/<string:from_page>')
 def removeFromCart(product_id, from_page):
     if current_user.is_anonymous:
         return redirect(url_for('login'))
 
+    cart = Cart.query.filter_by(user_id=current_user.id, product_id=product_id).first()
+    db.session.delete(cart)
+    db.session.commit()
+    return redirect(url_for('cart'))

@@ -1,19 +1,25 @@
 {% extends "base.html" %}
 
-    {% block content %}
+{% block content %}
+    <div>
+        <h2>Cart</h2>
+        {% for data in products %}
+           <div>
+               <h4>{{data.name}} - {{data.category_id}} </h4>
+               <div>Price: {{data.price}}</div>
+               <div>Stock: {{data.stock}}</div>
 
-        {% for item in cart %}
-            <table>
-                <tr>
-                    <th>User ID</th>
-                    <th>Product ID</th>
-                </tr>
-                <tr>
-                    <td>{{ user_id }}</td>
-                    <td>{{ product_id }}</td>
-                </tr>
-            </table>
-
+               <div>
+                    <a href='/product/{{data.id}}'> Detail </a>
+                    <br>
+                    <a href='/addToCart/{{data.id}}/cart'> Add to Cart </a>
+                    <br>
+                   <a href='/removeFromCart/{{data.id}}/cart'> Remove </a>
+               </div>
+           </div>
+           <hr>
         {% endfor %}
+   </div>
+{% endblock %}
 
-    {% endblock %}
+<a href="/checkout">Proceed to checkout</a>
