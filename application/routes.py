@@ -90,3 +90,16 @@ def removeFromCart(product_id, from_page):
     db.session.delete(cart)
     db.session.commit()
     return redirect(url_for('cart'))
+
+@app.route('/checkout')
+def checkout():
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+
+    products_in_cart = Cart.query.filter_by(user_id=current_user.id).join(Product, Cart.product_id == Product.id).add_columns(Product.name, Product.price, Product.image, Product.id).all()
+
+    return render_template('checkout.html', products_in_cart=products_in_cart)
+
+@app.route('/submissions', methods=['POST'])
+def submission():
+    return render_template('submissions.html')
