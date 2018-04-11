@@ -56,7 +56,7 @@ class Product(db.Model):
     description = db.Column(db.String(280))
     image = db.Column(db.String(80))
     stock = db.Column(db.Integer)
-    price = db.Column(db.Float)
+    price = db.Column(db.String(20))
 
     def __repr__(self):
         return '<Product {}'.format(self.description)
@@ -65,3 +65,11 @@ class Cart(db.Model):
     cart_id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class Checkout(db.Model):
+    checkout_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    subtotal = db.Column(db.Float)
+    product_id = db.Column(db.String(80))
+    date = db.Column(db.String(80))
+    total = db.Column(db.Float)

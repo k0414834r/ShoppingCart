@@ -1,6 +1,6 @@
 from application import app, db
-from application.models import User, Post, Member, Product, Cart
-from flask import render_template, url_for, redirect, flash
+from application.models import User, Post, Member, Product, Cart, Checkout
+from flask import render_template, url_for, redirect, flash, request
 from application.forms import LoginForm, RegistrationForm
 from flask_login import logout_user, login_user, current_user
 
@@ -98,8 +98,25 @@ def checkout():
 
     products_in_cart = Cart.query.filter_by(user_id=current_user.id).join(Product, Cart.product_id == Product.id).add_columns(Product.name, Product.price, Product.image, Product.id).all()
 
-    return render_template('checkout.html', products_in_cart=products_in_cart)
+    sum = 0
+    for row in products_in_cart:
+        sum += row.price
+
+    productNum = Cart.query.filter_by(user_id=current_user.id).count()
+
+    return render_template('checkout.html', products_in_cart=products_in_cart, productNum=productNum, sum=sum)
 
 @app.route('/submissions', methods=['POST'])
 def submission():
-    return render_template('submissions.html')
+    #get submit bill info
+    cardname = request.form.get('cardname')
+    cardnumber = request.form.get('cardnumber')
+
+    #gather cart items
+    products_in_cart = Cart.query.filter_by(user_id=current_user.id).join(Product,Cart.product_id == Product.id).add_columns(Product.name, Product.price, Product.image, Product.id).all()
+
+    #create a checkout submit record and put it to the db
+
+
+    print("checkout_action:" + cardname + cardnumber)
+    return render_template('submissions.html', products_in_cart=products_in_cart)
