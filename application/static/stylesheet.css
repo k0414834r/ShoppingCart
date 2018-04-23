@@ -1,29 +1,23 @@
-#one {
-    float: left;
-    width: 33%;
-    display: table-cell;
-}
-
-#two {
-    width: 33%;
-    display: table-cell;
-}
-
-#three {
-    float: right;
-    width: 33%;
-    display: table-cell;
-}
-
 .heading {
+    text-align: justify;
+    min-width: 500px;
     margin: 0 auto;
-    width: 50%;
+    width: 60%;
     font-size: 36px;
     font-family: Georgia;
     border-color: black;
     border: 0 0 5px 0;
-    display: table;
-    text-align: center;
+    list-style: none;
+}
+
+.heading:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+
+.heading li {
+    display: inline-block;
 }
 
 .container {

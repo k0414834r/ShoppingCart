@@ -115,10 +115,11 @@ span.price {
         <div class="container">
             <h4>Cart<span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b>{{ productNum }}</b></span></h4>
             {% for item in products_in_cart %}
-                <p><a href="/product/{{ item.id }}">{{ item.name }}</a> <span class="price">{{ item.price }}</span></p>
+                <p><a href="/product/{{ item.id }}">{{ item.name }}</a> <span class="price">${{ item.price }}</span></p>
+                <a href='/removeFromCheckout/{{item.id}}/cart'> Remove </a>
             {% endfor %}
             <hr>
-            <p>Total<span class="price" style="color:black"><b>{{ sum }}</b></span></p>
+            <p>Total<span class="price" style="color:black"><b>${{ sum }}</b></span></p>
         </div>
     </div>
 </div>

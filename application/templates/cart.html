@@ -3,10 +3,11 @@
 {% block content %}
     <div>
         <h2>Cart</h2>
+        <br><br><a href="/checkout"> Checkout </a><br><br>
         {% for data in products %}
            <div>
                <h4>{{data.name}} - {{data.category_id}} </h4>
-               <div>Price: {{data.price}}</div>
+               <div>Price: ${{data.price}}</div>
                <div>Stock: {{data.stock}}</div>
 
                <div>

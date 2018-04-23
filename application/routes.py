@@ -3,6 +3,7 @@ from application.models import User, Post, Member, Product, Cart, Checkout
 from flask import render_template, url_for, redirect, flash, request
 from application.forms import LoginForm, RegistrationForm
 from flask_login import logout_user, login_user, current_user
+from datetime import datetime
 
 @app.route("/")
 @app.route('/index')
@@ -68,6 +69,9 @@ def products(product_id):
 
 @app.route('/cart')
 def cart():
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+
     products_in_cart = Cart.query.filter_by(user_id=current_user.id).join(Product, Cart.product_id == Product.id).add_columns(Product.name, Product.price, Product.image, Product.id).all()
     return render_template('cart.html', products=products_in_cart)
 
@@ -91,6 +95,16 @@ def removeFromCart(product_id, from_page):
     db.session.commit()
     return redirect(url_for('cart'))
 
+@app.route('/removeFromCheckout/<int:product_id>/<string:from_page>')
+def removeFromCheckout(product_id, from_page):
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+
+    cart = Cart.query.filter_by(user_id=current_user.id, product_id=product_id).first()
+    db.session.delete(cart)
+    db.session.commit()
+    return redirect(url_for('checkout'))
+
 @app.route('/checkout')
 def checkout():
     if current_user.is_anonymous:
@@ -107,7 +121,7 @@ def checkout():
     return render_template('checkout.html', products_in_cart=products_in_cart, productNum=productNum, sum=sum)
 
 @app.route('/submissions', methods=['POST'])
-def submission():
+def submissions(checkout_id, subtotal, product_id, date, total):
     #get submit bill info
     cardname = request.form.get('cardname')
     cardnumber = request.form.get('cardnumber')
@@ -116,7 +130,13 @@ def submission():
     products_in_cart = Cart.query.filter_by(user_id=current_user.id).join(Product,Cart.product_id == Product.id).add_columns(Product.name, Product.price, Product.image, Product.id).all()
 
     #create a checkout submit record and put it to the db
+    receipt = Checkout(checkout_id=checkout_id, user_id=current_user.id, subtotal=subtotal, product_id=product_id, date=date, total=total)
+    date = datetime.now()
+    subtotal = sum
+    total = subtotal * 0.95
+    product_id = products_in_cart.Product.id
+    db.session.add(receipt)
+    db.session.commit()
 
-
-    print("checkout_action:" + cardname + cardnumber)
-    return render_template('submissions.html', products_in_cart=products_in_cart)
+    flash("checkout_action:" + " " + cardname + " " + cardnumber + "subtotal: " + subtotal + "total " + total)
+    return render_template('submissions.html', product_id=product_id, date=date, subtotal=subtotal, total=total, checkout_id=checkout_id, cardname=cardname, cardnumber=cardnumber)
